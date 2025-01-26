@@ -17,13 +17,7 @@ type commandHandler struct {
 	defaultIdentity     string
 }
 
-func (h *commandHandler) prepare(cmd *cobra.Command, args []string) error {
-
-	var secretName = args[0]
-	re := regexp.MustCompile(`^[A-Za-z0-9-]+$`)
-	if !re.MatchString(secretName) {
-		return fmt.Errorf("the secret name must contain only 0-9, a-z, A-Z, and -")
-	}
+func (h *commandHandler) prepare(cmd *cobra.Command, args []string) {
 
 	if len(h.keyVaultName) == 0 {
 		h.keyVaultName = h.defaultKeyVaultName
@@ -32,8 +26,6 @@ func (h *commandHandler) prepare(cmd *cobra.Command, args []string) error {
 	if len(h.identity) == 0 {
 		h.identity = h.defaultIdentity
 	}
-
-	return nil
 }
 
 func (h *commandHandler) handle(cmd *cobra.Command, args []string) error {
@@ -56,6 +48,25 @@ func (h *commandHandler) handle(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
+func validateArgs(cmd *cobra.Command, args []string) error {
+	if err := cobra.ExactArgs(1)(cmd, args); err != nil {
+		return err
+	}
+
+	var secretName = args[0]
+
+	if len(secretName) == 0 {
+		return fmt.Errorf("the secret name must not be empty")
+	}
+
+	re := regexp.MustCompile(`^[A-Za-z0-9-]+$`)
+	if !re.MatchString(secretName) {
+		return fmt.Errorf("the secret name must contain only 0-9, a-z, A-Z, and -")
+	}
+
+	return nil
+}
+
 func execute() error {
 
 	var handler = commandHandler{
@@ -64,11 +75,11 @@ func execute() error {
 	}
 
 	var command = &cobra.Command{
-		Use:     "azsecret [secret name]",
-		Short:   "Retrieves a secret value stored in Azure Key Vault",
-		Args:    cobra.ExactArgs(1),
-		PreRunE: handler.prepare,
-		RunE:    handler.handle,
+		Use:    "azsecret [secret name]",
+		Short:  "Retrieves a secret value stored in Azure Key Vault",
+		Args:   validateArgs,
+		PreRun: handler.prepare,
+		RunE:   handler.handle,
 	}
 
 	command.PersistentFlags().StringVarP(&handler.keyVaultName,
