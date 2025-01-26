@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"context"
@@ -13,14 +13,14 @@ const (
 	baseTokenUrl = "http://169.254.169.254/metadata/identity/oauth2/token"
 )
 
-type keyVaultClient struct {
+type KeyVaultClient struct {
 	name       string
 	httpClient http.Client
 	token      string
 }
 
-func newKeyVaultClient(name string) *keyVaultClient {
-	return &keyVaultClient{
+func NewKeyVaultClient(name string) *KeyVaultClient {
+	return &KeyVaultClient{
 		name: name,
 		httpClient: http.Client{
 			Timeout: 30 * time.Second,
@@ -28,7 +28,7 @@ func newKeyVaultClient(name string) *keyVaultClient {
 	}
 }
 
-func (kvc *keyVaultClient) authorize(identity string) error {
+func (kvc *KeyVaultClient) Authorize(identity string) error {
 	token, err := kvc.retrieveAccessToken(identity)
 	if err != nil {
 		return err
@@ -37,7 +37,7 @@ func (kvc *keyVaultClient) authorize(identity string) error {
 	return nil
 }
 
-func (kvc *keyVaultClient) getSecret(secretName string) (string, error) {
+func (kvc *KeyVaultClient) GetSecret(secretName string) (string, error) {
 
 	url, err := buildSecretUrl(kvc.name, secretName)
 	if err != nil {
@@ -74,7 +74,7 @@ func (kvc *keyVaultClient) getSecret(secretName string) (string, error) {
 	return secret.Value, nil
 }
 
-func (kvc *keyVaultClient) retrieveAccessToken(identity string) (string, error) {
+func (kvc *KeyVaultClient) retrieveAccessToken(identity string) (string, error) {
 
 	url, err := buildTokenUrl(identity)
 	if err != nil {

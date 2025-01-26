@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/openclosed-dev/azsecret/internal"
 	"github.com/spf13/cobra"
 )
 
@@ -29,14 +30,14 @@ func (h *commandHandler) prepare(cmd *cobra.Command, args []string) {
 func (h *commandHandler) handle(cmd *cobra.Command, args []string) error {
 
 	var secretName = args[0]
-	var client = newKeyVaultClient(h.keyVaultName)
+	var client = internal.NewKeyVaultClient(h.keyVaultName)
 
-	var err = client.authorize(h.identity)
+	var err = client.Authorize(h.identity)
 	if err != nil {
 		return err
 	}
 
-	secret, err := client.getSecret(secretName)
+	secret, err := client.GetSecret(secretName)
 	if err != nil {
 		return err
 	}
