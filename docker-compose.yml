@@ -1,7 +1,0 @@
-services:
-  builder:
-    image: azsecret-focal:latest
-    build: .
-    volumes:
-      - '.:/repo'
-    entrypoint: ['make']

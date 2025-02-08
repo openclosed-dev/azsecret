@@ -13,4 +13,5 @@ ENV PATH=$PATH:/usr/local/go/bin
 RUN mkdir -p /repo
 WORKDIR /repo
 
-ENTRYPOINT ["bin/bash"]
+ENTRYPOINT ["make"]
+CMD ["build"]
