@@ -1,7 +1,7 @@
 {
     "name": "Golang Dev Container",
     "build": {
-        "dockerfile": "./DockerFile",
+        "dockerfile": "./Dockerfile",
         "args": {
             "USERNAME": "vscode"
         }
