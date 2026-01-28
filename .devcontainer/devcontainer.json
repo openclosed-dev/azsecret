@@ -1,8 +1,13 @@
 {
     "name": "Golang Dev Container",
     "build": {
-        "dockerfile": "./DockerFile"
+        "dockerfile": "./DockerFile",
+        "args": {
+            "USERNAME": "vscode"
+        }
     },
+    "workspaceFolder": "/home/vscode/workspaces/${localWorkspaceFolderBasename}",
+    "workspaceMount": "source=${localWorkspaceFolder},target=${containerWorkspaceFolder},type=bind",
     "features": {
     },
     "customizations": {
