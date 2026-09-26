@@ -2,7 +2,7 @@
   "name": "${localWorkspaceFolderBasename}",
   "dockerComposeFile": "compose.yaml",
   "service": "devcontainer",
-  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "workspaceFolder": "/home/${localEnv:USER}/${localWorkspaceFolderBasename}",
   "features": {
   },
   "customizations": {
@@ -10,7 +10,6 @@
       "extensions": [
         "editorconfig.editorconfig",
         "streetsidesoftware.code-spell-checker",
-        "ms-azuretools.vscode-docker",
         "golang.Go"
       ]
     }

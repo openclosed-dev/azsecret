@@ -32,23 +32,12 @@ The following environment variables control the behavior of the command.
 
 On Ubuntu 24.04 LTS, the following command installs the tools required for development.
 
-```
-sudo apt install golang-go build-essential
+```shell
+sudo apt install golang-go
 ```
 
 Invoke the following command in the repository root.
-```
-make
-```
 
-### Building with Docker
-
-Build a new Docker image for Golang development using the Dockerfile in this repository root.
-```
-docker image build -t go-builder:latest .
-```
-
-And run a Docker container from the image.
-```
-docker container run --rm -v '.:/repo' go-builder:latest
+```shell
+go build ./cmd/azsecret
 ```
