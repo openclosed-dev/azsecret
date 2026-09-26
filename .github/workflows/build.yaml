@@ -1,0 +1,38 @@
+name: Build
+
+on: workflow_dispatch
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [linux, windows]
+        include:
+          - os: linux
+            runner: ubuntu-24.04
+            extension: ''
+          - os: windows
+            runner: windows-latest
+            extension: '.exe'
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.27.1'
+      - name: Build
+        run: go build -trimpath ./cmd/azsecret
+      - name: Launch
+        run: ./azsecret --help
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: azsecret-${{ matrix.os }}-amd64
+          path: |
+            azsecret${{ matrix.extension }}
+            LICENSE
+          retention-days: 1
